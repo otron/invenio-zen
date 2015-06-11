@@ -68,8 +68,8 @@ class ExternalFile(object):
     def close(self):
         self._file.close()
 
-    def read(self):
-        return self._file.read()
+    def read(self, chunksize):
+        return self._file.read(chunksize)
 
 
 class Storage(object):
