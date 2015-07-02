@@ -51,7 +51,10 @@ def fetch_last_updated(fmt):
     row = run_sql(select_sql, (fmt.lower(), ))
 
     # Fallback in case we receive None instead of a valid date
-    last_date = row[0][0] or datetime(year=1900, month=1, day=1)
+    try:
+        last_date = row[0][0] or datetime(year=1900, month=1, day=1)
+    except:
+        last_date = datetime(year=1900, month=1, day=1)
 
     return last_date
 
