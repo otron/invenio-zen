@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # This file is part of Invenio.
-# Copyright (C) 2014 CERN.
+# Copyright (C) 2014, 2015 CERN.
 #
 # Invenio is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -23,11 +23,14 @@ from wtforms.validators import ValidationError
 from invenio.ext.admin.views import ModelView
 from invenio.ext.sqlalchemy import db
 from invenio.modules.pages.models import Page
+from wtforms import TextAreaField
 
 
 def template_exists(form, field):
     """ Form validation: check that selected template exists """
-    template_name = "pages/" + field.data
+    if not field.data:
+        return
+    template_name = field.data
     try:
         current_app.jinja_env.get_template(template_name)
     except TemplateNotFound:
@@ -49,20 +52,24 @@ class PagesAdmin(ModelView):
 
     page_size = 100
 
+    form_excluded_columns = ('represents_list', 'part_of_lists')
+
     form_args = dict(
         template_name=dict(
+            default="pages/default.html",
             validators=[template_exists]
         ))
 
-    #FIXME if we want to prevent users from modifying the dates
-    # form_widget_args = {
-    #     'created': {
-    #         'type': "hidden"
-    #     },
-    #     'last_modified': {
-    #         'type': "hidden"
-    #     },
-    # }
+    form_widget_args = {
+        'created': {
+            'readonly': True
+        },
+        'last_modified': {
+            'readonly': True
+        },
+    }
+
+    form_overrides = dict(description=TextAreaField)
 
     def __init__(self, model, session, **kwargs):
         super(PagesAdmin, self).__init__(
