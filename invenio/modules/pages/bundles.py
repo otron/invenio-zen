@@ -29,3 +29,10 @@ pages_list = Bundle(
     filters="less, cleancss",
     weight=51
 )
+
+styles_faq = Bundle(
+    "css/pages/faq.less",
+    output="faq.css",
+    filters="less, cleancss",
+    weight=51
+)
