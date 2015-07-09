@@ -231,4 +231,8 @@ def setup_app(app):
         )
         return rv
 
+    # Enable markdown template filter
+    from flask.ext.misaka import Misaka
+    Misaka(app)
+
     return app
